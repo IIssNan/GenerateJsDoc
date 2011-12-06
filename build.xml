@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<project name="" basedir="." default="run">
+    <property name="dir.lib" location="${basedir}/lib" />
+    <property name="dir.tst" location="${basedir}/tst" />
+    <property name="dir.jsdoc" location="${dir.lib}/jsdoc-toolkit" />
+
+    <property name="dir.source" location="${dir.jsdoc}/app/test" />
+    <property name="dir.output" location="${dir.tst}/output" />
+    <property name="file.includes" value="event.js" />
+    <property name="file.excludes" value="" />
+    
+    <target name="init">
+        <echo>init</echo>
+        <mkdir dir="${dir.source}" />
+        <mkdir dir="${dir.output}" />
+    </target>
+
+    <target name="generate">
+        <property name="jar.jsdoc" location="${dir.jsdoc}/jsrun.jar" />
+        <property name="js.jsdoc" location="${dir.jsdoc}/app/run.js" />
+        
+        <apply executable="java">
+            <fileset dir="${dir.source}" includes="${file.includes}" excludes="${file.excludes}" />
+            <arg line="-jar" />
+            <arg path="${jar.jsdoc}" />
+            <arg path="${js.jsdoc}" />
+            <arg line="-a" />
+            <arg line="-t=${dir.jsdoc}/templates/jsdoc" />
+            <arg line="-d=${dir.output}" />
+            <srcfile />
+            <fileset dir="${dir.source}" includes="event.js" />
+        </apply>
+    </target>
+
+    <target name="clean">
+        <delete dir="${dir.output}" />
+    </target>
+
+    <target name="run" depends="init, generate" />
+</project>
